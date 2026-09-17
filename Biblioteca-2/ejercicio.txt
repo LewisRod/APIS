@@ -1,0 +1,37 @@
+API 1 — Biblioteca
+Objetivo: Practicar autenticación básica y findUnique, findMany, create.
+Modelos
+Usuario
+├── id
+├── nombre
+├── email
+├── password
+└── rol
+
+Libro
+├── id
+├── titulo
+├── autor
+├── publicado
+└── usuarioId
+Roles
+usuario
+admin
+Método	Ruta	Descripción
+POST	/auth/register	Registrar usuario
+POST	/auth/login	Iniciar sesión y obtener JWT
+POST	/libros	Crear libro
+GET	/libros	Listar libros propios
+GET	/libros/:id	Buscar uno de sus libros
+DELETE	/libros/:id	Eliminar uno de sus libros
+
+
+Reglas de negocio
+- El email debe ser único.
+- El usuario se registra como usuario.
+- El rol no puede venir del cliente.
+- Las rutas de libros requieren JWT.
+- Un usuario solamente puede ver sus propios libros.
+- Un usuario solamente puede eliminar sus propios libros.
+- El usuarioId del libro sale del JWT.
+- El admin puede ver todos los libros.
