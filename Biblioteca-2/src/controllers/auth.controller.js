@@ -21,28 +21,22 @@ export const register = async (req, res) => {
     data: { nombre, email, password: passwordHash },
   });
 
-  return res
-    .status(201)
-    .json({
-      mensaje: "usuario registrado correctamente",
-      usuario: {
-        id: usuario.id,
-        nombre: usuario.nombre,
-        email: usuario.email,
-        rol: usuario.rol,
-      },
-    });
+  return res.status(201).json({
+    mensaje: "usuario registrado correctamente",
+    usuario: {
+      id: usuario.id,
+      nombre: usuario.nombre,
+      email: usuario.email,
+      rol: usuario.rol,
+    },
+  });
 };
-
-
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
-  const usuario = await prisma.usuario.findUnique({
-    where: {
-      email,
-    },
+  const usuario = await prisma.libro.findUnique({
+    where: { email },
   });
 
   if (!usuario) {
@@ -56,15 +50,11 @@ export const login = async (req, res) => {
   }
 
   const token = jwt.sign(
-    {
-      id: usuario.id,
-      rol: usuario.rol,
-    },
+    { id: usuario.id, rol: usuario.rol },
     process.env.JWT_SECRET,
-    {
-      expiresIn: "24h",
-    },
+    { expiresIn: "20h" },
   );
 
-  return res.status(200).json({ mensaje: "Inicio de sesión exitoso", token });
+  return res.status(200).json({ mensaje: "iniciado correctamente", token });
 };
+

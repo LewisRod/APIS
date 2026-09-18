@@ -1,0 +1,36 @@
+API 3 — Gimnasio
+Sistema de membresías
+Modelos
+Usuario
+├── id
+├── nombre
+├── email
+├── password
+└── rol
+
+Membresia
+├── id
+├── tipo
+├── precio
+├── activa
+└── usuarioId
+Roles
+cliente
+admin
+Método	Ruta	Descripción
+POST	/auth/register	Registrar cliente
+POST	/auth/login	Login
+POST	/membresias	Crear membresía
+GET	/membresias	Ver membresías
+GET	/membresias/:id	Buscar membresía
+PUT	/membresias/:id	Actualizar membresía
+DELETE	/membresias/:id	Cancelar membresía
+
+
+Reglas
+- Un cliente solamente puede ver su membresía.
+- admin puede ver todas.
+- Una membresía nueva comienza activa.
+- Una membresía cancelada no puede modificarse.
+- El precio debe ser positivo.
+- El usuario no puede modificar usuarioId.

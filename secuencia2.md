@@ -20,6 +20,7 @@ npx prisma migrate dev --name agregar-votos
 --Variables de entorno
 --root directori: nombre exacto de la carpeta del repositorio
 --npm build dev
+--generar dominio  -> setting networking
 
 
 ------------------------------------------------------------------------
@@ -100,7 +101,7 @@ node_modules/
 npx prisma init
 ```
 
-Configurar `prisma.config.ts`:
+Configurar `prisma7.config.ts`:
 
 ``` ts
 import "dotenv/config";
@@ -268,8 +269,6 @@ Servidor ejecutándose en el puerto 3000
 
 # PASO 11 --- Crear Middlewares
 
-Crear:
-
 ``` text
 src/middlewares/
 ├── logger.middleware.js
@@ -327,7 +326,30 @@ import loggerMiddleware from "./middlewares/logger.middleware.js"
 
 No mezclar las dos formas.
 
-------------------------------------------------------------------------
+------------------------------------------------------------------
+
+### Aut
+import jwt from "jsonwebtoken";
+
+export const authMiddleware = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({ mensaje: "Token requerido" });
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ mensaje: "Formato de token inválido"})
+  }
+
+  const usuario = jwt.verify(token, process.env.JWT_SECRET);
+
+  req.usuario = usuario;
+
+  next();
+};
 
 
 # PASO 12 --- Crear Controllers
@@ -378,10 +400,10 @@ import {
 
 const router = express.Router()
 
-router.get("/", listarProductos)
-router.post("/", agregarProducto)
-router.put("/:id", actualizarCantidad)
-router.delete("/:id", eliminarProducto)
+router.get("/",authController, listarProductos)
+router.post("/",authController, agregarProducto)
+router.put("/:id",authController, actualizarCantidad)
+router.delete("/:id",authController, eliminarProducto)
 
 export default router
 ```
