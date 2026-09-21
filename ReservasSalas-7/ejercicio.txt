@@ -1,0 +1,157 @@
+🟢 API 6 — Sistema de Reservas de Salas
+
+Sistema de reservas para salas de reuniones
+
+Una empresa tiene varias salas que sus empleados pueden reservar para reuniones. Cada reserva tiene una fecha, hora, duración, estado y costo.
+
+Modelos
+
+Empleado
+├── id
+├── nombre
+├── email
+├── password
+└── rol
+
+Reserva
+├── id
+├── sala
+├── fecha
+├── horaInicio
+├── horaFin
+├── duracion
+├── costo
+├── estado
+├── empleadoId
+└── creadaEn
+
+Roles
+
+coordinador
+empleado
+
+Método
+
+Ruta
+
+Descripción
+
+POST
+
+/auth/register
+
+Registrar empleado
+
+POST
+
+/auth/login
+
+Iniciar sesión y obtener JWT
+
+POST
+
+/reservas
+
+Crear una reserva
+
+POST
+
+/reservas/:id/cancelar
+
+Cancelar una reserva
+
+POST
+
+/reservas/:id/finalizar
+
+Finalizar una reserva
+
+PUT
+
+/reservas/:id
+
+Modificar fecha y horario
+
+PUT
+
+/reservas/:id/estado
+
+Cambiar estado de la reserva
+
+PUT
+
+/reservas/:id/costo
+
+Actualizar costo de la reserva
+
+GET
+
+/reservas
+
+Listar reservas
+
+GET
+
+/reservas/estadisticas
+
+Obtener estadísticas
+
+DELETE
+
+/reservas/:id
+
+Eliminar una reserva
+
+Reglas
+
+Empleado será el modelo utilizado para autenticación.
+
+El JWT debe identificar al empleado que crea la reserva.
+
+El empleadoId debe salir del JWT, no del body.
+
+Una reserva nueva comienza con:
+
+estado = "pendiente"
+
+Los estados permitidos son:
+
+pendiente
+confirmada
+en_curso
+finalizada
+cancelada
+
+La fecha de la reserva no puede ser anterior al día actual.
+
+horaFin debe ser posterior a horaInicio.
+
+La duración debe calcularse automáticamente:
+
+duracion = horaFin - horaInicio
+
+El costo depende de la duración:
+
+costo = duracion × precioPorHora
+
+Puedes utilizar un precio fijo definido por el sistema, por ejemplo:
+
+precioPorHora = 500
+
+Una reserva creada comienza como pendiente.
+
+Solo el coordinador puede confirmar una reserva.
+
+Un empleado solamente puede modificar sus propias reservas.
+
+Una reserva cancelada no puede volver a confirmada.
+
+Una reserva finalizada no puede modificarse.
+
+Una reserva solamente puede pasar a en_curso cuando llegue su fecha/hora.
+
+Una reserva en_curso puede pasar a finalizada.
+
+No se puede eliminar una reserva finalizada.
+
+No pueden existir dos reservas para la misma sala en horarios que se superpongan.
