@@ -1,0 +1,46 @@
+🟢 API 4 — Sistema de Reservas de Canchas
+Gestión de canchas y reservas
+Modelos
+Usuario
+├── id
+├── nombre
+├── email
+├── password
+└── rol
+
+Cancha
+├── id
+├── nombre
+├── deporte
+├── precioHora
+├── disponible
+├── horasReservadas
+└── encargadoId
+
+
+Roles
+encargado
+cliente
+
+
+Método	Ruta	                Descripción
+POST	/auth/register	        Registrar usuario
+POST	/auth/login         	Iniciar sesión y obtener JWT
+POST	/canchas	            Crear cancha
+POST	/canchas/:id/reservar	Reservar una hora
+POST	/canchas/:id/cancelar	Cancelar una reserva
+PUT	/canchas/:id	            Actualizar información de la cancha
+PUT	/canchas/:id/precio	        Cambiar precio por hora
+PUT	/canchas/:id/disponibilidad	Cambiar disponibilidad
+GET	/canchas	Listar canchas
+GET	/canchas/:id	Ver cancha y estadísticas
+DELETE	/canchas/:id	Eliminar cancha
+
+
+Reglas
+- Todas las operaciones de las canchas requieren JWT.
+- Un encargado puede crear y administrar sus propias canchas.
+- Un cliente puede reservar una cancha disponible.
+- El encargado no puede modificar una cancha de otro encargado.
+- precioHora debe ser mayor que 0.
+- Una cancha nueva comienza con:

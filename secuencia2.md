@@ -4,18 +4,14 @@
 > II con **Node.js + Express + Prisma 7 + PostgreSQL/Neon + railway**.
 
 ------------------------------------------------------------------------
-
-# ⚡ Regla importante: cambios en `schema.prisma`
-
-Si editas un `model` en `schema.prisma`, debes crear una nueva
-migración:
+SI SE HACE CAMBIO EN EL MODEL
 
 ``` bash
 npx prisma migrate dev --name agregar-votos
 ```
 
 
-# ⚡ Para desplegar api
+#  Para desplegar api
 
 --Variables de entorno
 --root directori: nombre exacto de la carpeta del repositorio
@@ -28,8 +24,6 @@ npx prisma migrate dev --name agregar-votos
 # PASO 1 --- Crear proyecto Node
 
 ``` bash
-mkdir ejercicio1
-cd ejercicio1
 npm init -y
 ```
 
@@ -42,7 +36,7 @@ Configurar `package.json`:
     "start": "node src/index.js",
     "build": "prisma generate",
     "dev": "nodemon src/index.js"
-  }
+  } 
 }
 ```
 
@@ -60,14 +54,6 @@ Dependencias de desarrollo:
 
 ```bash
 npm install -D prisma@7.10 nodemon
-```
-
-
-Para asegurar Prisma 7.10:
-
-``` bash
-npm uninstall prisma @prisma/client
-npm install prisma@7.10 @prisma/client@7.10
 ```
 
 ------------------------------------------------------------------------
@@ -90,8 +76,6 @@ PORT=3000
 .env
 node_modules/
 ```
-
-⚠️ Nunca subir `.env` al repositorio.
 
 ------------------------------------------------------------------------
 
@@ -121,6 +105,7 @@ export default defineConfig({
 ```
 
 ------------------------------------------------------------------------
+
 # PASO 4.5 — Generar `JWT_SECRET` y `API_KEY`
 
 Para generar el secreto JWT:
@@ -129,12 +114,23 @@ Para generar el secreto JWT:
 node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ```
 
+
+Para generar la API Key:
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
 Copiar el resultado al `.env`:
 
 ```env
 JWT_SECRET=resultado_generado
-```
+API_KEY=resultado_generado
+``` 
+
+
 ------------------------------------------------------------------------
+
+
 # PASO 5 --- Configurar `schema.prisma`
 
 Configuración base:
@@ -148,7 +144,7 @@ datasource db {
   provider = "postgresql"
 }
 
-model Producto {
+model nombreTabla {
   id       Int @id @default(autoincrement())
   nombre   String
   precio   Int
@@ -168,12 +164,6 @@ El `model` se adapta a cada proyecto.
 
 ``` bash
 npx prisma generate
-```
-
-Resultado esperado:
-
-``` text
-✔ Generated Prisma Client (v7.10.0) to ./node_modules/@prisma/client
 ```
 
 ------------------------------------------------------------------------
@@ -257,12 +247,6 @@ Probar:
 
 ``` bash
 npm run dev
-```
-
-Debe aparecer:
-
-``` text
-Servidor ejecutándose en el puerto 3000
 ```
 
 ------------------------------------------------------------------------
@@ -350,6 +334,20 @@ export const authMiddleware = (req, res, next) => {
 
   next();
 };
+
+
+
+### key
+export const apiKeyMiddleware = (req, res, next) => {
+  const key = req.headers["x-api-key"]
+  if (!key || key !== process.env.API_KEY) {
+    return res.status(401).json({ error: "ponga la api key bien menol" });
+  }
+  next()
+}
+
+
+
 
 
 # PASO 12 --- Crear Controllers

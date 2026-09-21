@@ -1,0 +1,96 @@
+# 🟢 API 2 — Sistema de Eventos
+
+## Gestión de eventos y asistentes
+
+### Modelos
+```
+Usuario
+├── id
+├── nombre
+├── email
+├── password
+└── rol
+
+Evento
+├── id
+├── nombre
+├── descripcion
+├── precio
+├── capacidad
+├── fecha
+└── organizadorId
+
+Inscripcion
+├── id
+├── usuarioId
+├── eventoId
+└── fecha
+```
+
+### Roles
+```
+organizador
+asistente
+```
+
+| MétodoRutaDescripción |                             |                                  |
+| --------------------- | --------------------------- | -------------------------------- |
+| POST                  | `/auth/register`            | Registrar usuario                |
+| POST                  | `/auth/login`               | Iniciar sesión y obtener JWT     |
+| POST                  | `/eventos`                  | Crear evento                     |
+| GET                   | `/eventos`                  | Listar eventos                   |
+| GET                   | `/eventos/:id`              | Ver un evento                    |
+| POST                  | `/eventos/:id/inscribirse`  | Inscribirse a un evento          |
+| DELETE                | `/eventos/:id/inscribirse`  | Cancelar inscripción             |
+| GET                   | `/eventos/mis-eventos`      | Ver eventos donde estoy inscrito |
+| GET                   | `/eventos/:id/estadisticas` | Ver estadísticas del evento      |
+| PUT                   | `/eventos/:id`              | Modificar evento                 |
+| DELETE                | `/eventos/:id`              | Eliminar evento                  |
+
+### Reglas
+
+- El usuario debe autenticarse mediante JWT.√
+- Un `organizador` puede crear y administrar eventos.
+- Un `asistente` puede inscribirse en eventos.
+- Un asistente solamente puede cancelar sus propias inscripciones.
+- Un evento nuevo debe tener capacidad y precio positivos.√
+- La capacidad representa el número máximo de asistentes.√
+- No se puede superar la capacidad del evento.
+- Un usuario no puede inscribirse dos veces en el mismo evento.
+- El `usuarioId` de una inscripción debe obtenerse del JWT.
+- Un asistente solamente puede modificar sus propias inscripciones.
+- Un organizador solamente puede modificar o eliminar sus propios eventos.
+- No se puede eliminar un evento si tiene inscripciones activas.
+- `/eventos/:id/estadisticas` debe calcular:
+  - cantidad de inscritos
+  - cupos disponibles
+  - porcentaje de ocupación
+  - dinero recaudado
+  - porcentaje de cupos restantes
+- `/eventos` debe permitir filtrar eventos por precio.
+- También debe permitir buscar eventos por nombre.
+- El precio y la capacidad deben poder filtrarse mediante rangos.
+
+### Prisma Client que iremos practicando
+```
+findMany
+findUnique
+findFirst
+create
+createMany
+update
+delete
+count
+aggregate
+contains
+startsWith
+endsWith
+gt
+gte
+lt
+lte
+include
+select
+
+vamos con este ahora, lo ire haciendo y donde este quedado te aviso
+```
