@@ -8,7 +8,7 @@ const app = express()
 
 app.use(express.json())
 app.use(loggerMiddleware)
-app.use(authRouter)
+app.use("/auth",authRouter)
 app.use("/pedidos",pedidosRouter)
 
 
